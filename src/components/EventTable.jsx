@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
+import { cities, clubs, tableEvents } from "../constants/tableData";
+import {
+  filterEvents,
+  formatEventDate,
+  getNextSortDirection,
+  sortEvents
+} from "../utils/tableUtils";
 import { DatePicker } from "./DatePicker";
 import { FilterDropdown } from "./FilterDropdown";
-import { cities, clubs, tableEvents } from "../constants/tableData";
-import { sortEvents, filterEvents, formatEventDate, getNextSortDirection } from "../utils/tableUtils";
 
 const SortIcon = ({ column, sortConfig }) => {
   if (sortConfig.key !== column) {
-    return <IoMdArrowDropdown className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" />;
+    return (
+      <IoMdArrowDropdown className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100" />
+    );
   }
   return sortConfig.direction === "asc" ? (
     <IoMdArrowDropup className="w-4 h-4" />
@@ -51,16 +58,16 @@ export function EventTable() {
   const hasMoreEvents = visibleEvents < filteredEvents.length;
 
   return (
-    <div className="w-full bg-black py-12">
+    <div className="w-full py-12 bg-black">
       <div className="max-w-[1320px] mx-auto border border-white rounded-xl">
         <div className="py-5">
           <h2 className="leading-[1] tracking-[-0.02em] px-6 font-pixel font-normal text-white">
             Upcoming Events
           </h2>
         </div>
-        <div className="bg-white border border-black p-6 rounded-b-xl">
+        <div className="p-6 bg-white border border-black rounded-b-xl">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6 pb-4 border-b border-black">
+          <div className="flex items-center justify-between pb-4 mb-6 ">
             <div className="flex items-center gap-4 text-sm text-black font-pixel">
               <FilterDropdown
                 options={cities}
@@ -76,13 +83,16 @@ export function EventTable() {
                 onSelect={setSelectedClub}
               />
               <span>•</span>
-              <DatePicker selected={selectedDate} onSelect={setSelectedDate} />
+              <DatePicker
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+              />
               {hasActiveFilters && (
                 <>
                   <span>•</span>
                   <button
                     onClick={resetFilters}
-                    className="text-black hover:text-gray-600 transition-colors"
+                    className="text-black transition-colors hover:text-gray-600"
                   >
                     Reset
                   </button>
@@ -104,16 +114,19 @@ export function EventTable() {
           {/* Table */}
           <table className="w-full">
             <thead>
-              <tr className="border-b border-black text-black">
+              <tr className="text-black border-b border-black">
                 {["date", "event", "club", "city", "admission"].map((column) => (
                   <th
                     key={column}
-                    className="text-left py-2 text-sm font-pixel group cursor-pointer hover:text-gray-600"
+                    className="py-2 text-sm text-left cursor-pointer font-pixel group hover:text-gray-600"
                     onClick={() => handleSort(column)}
                   >
                     <div className="flex items-center gap-1">
                       {column.charAt(0).toUpperCase() + column.slice(1)}
-                      <SortIcon column={column} sortConfig={sortConfig} />
+                      <SortIcon
+                        column={column}
+                        sortConfig={sortConfig}
+                      />
                     </div>
                   </th>
                 ))}
@@ -121,7 +134,10 @@ export function EventTable() {
             </thead>
             <tbody>
               {filteredEvents.slice(0, visibleEvents).map((event) => (
-                <tr key={event.id} className="border-b border-gray-200 hover:bg-gray-50">
+                <tr
+                  key={event.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
                   <td className="py-4 text-sm text-black align-top">
                     {formatEventDate(event.date)}
                   </td>
@@ -135,11 +151,14 @@ export function EventTable() {
               ))}
               {filteredEvents.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-gray-500 font-pixel">
+                  <td
+                    colSpan={5}
+                    className="py-8 text-center text-gray-500 font-pixel"
+                  >
                     No events found. Try adjusting your filters.
                     <button
                       onClick={resetFilters}
-                      className="block mx-auto mt-2 text-black hover:text-gray-600 underline"
+                      className="block mx-auto mt-2 text-black underline hover:text-gray-600"
                     >
                       Reset Filters
                     </button>
@@ -154,7 +173,7 @@ export function EventTable() {
             <div className="flex justify-center mt-6">
               <button
                 onClick={handleLoadMore}
-                className="text-sm text-black hover:text-gray-600 transition-colors cursor-pointer font-pixel"
+                className="text-sm text-black transition-colors cursor-pointer hover:text-gray-600 font-pixel"
               >
                 Load More...
               </button>
