@@ -1,16 +1,39 @@
-import { IoClose } from 'react-icons/io5';
-import { IoCalendarOutline } from 'react-icons/io5';
-import { IoLocationOutline } from 'react-icons/io5';
-import { IoBusinessOutline } from 'react-icons/io5';
+import {
+  IoBusinessOutline,
+  IoCalendarOutline,
+  IoLocationOutline,
+  IoShareSocialOutline
+} from "react-icons/io5";
 
 export function EventCard({ image, date, location, venue, city, description }) {
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `${location} Event at ${venue}`,
+          text: description,
+          url: window.location.href
+        })
+        .catch((error) => console.log("Error sharing:", error));
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => alert("Link copied to clipboard!"))
+        .catch((error) => console.log("Error copying to clipboard:", error));
+    }
+  };
+
   return (
     <div className="flex flex-col w-[320px] h-[600px] border-2 border-black m-auto font-pixel z-50 hover:scale-105 transition-transform duration-300">
       {/* Top Bar */}
       <div className="flex flex-row justify-between items-center py-[8px] w-full h-[40px] bg-black">
         <span className="text-[16px] leading-[16px] text-white flex-grow">{location}</span>
-        <button className="w-7 h-7 bg-[#F2F2F2] flex items-center justify-center hover:bg-[#D3FB51] transition-colors duration-300">
-          <IoClose className="w-5 h-5 text-black" />
+        <button
+          onClick={handleShare}
+          className="w-7 h-7 bg-[#F2F2F2] flex items-center justify-center hover:bg-[#D3FB51] transition-colors duration-300"
+        >
+          <IoShareSocialOutline className="w-5 h-5 text-black" />
         </button>
       </div>
 
