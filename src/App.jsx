@@ -6,22 +6,23 @@ import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
 import { ScrollingText } from "./components/ScrollingText";
 import { events } from "./constants/events";
+import { getImagePath } from "./utils/imageUtils";
 
 function App() {
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black">
       <div className="max-w-[1440px] mx-auto relative h-screen">
         {/* Header */}
         <header className="h-[100px] z-50">
           <nav className="w-full h-full flex flex-row justify-between items-center px-[60px]">
             <div className="flex items-center">
               <img
-                src="/images/logo.png"
+                src={getImagePath("images/logo.png")}
                 alt="Shuffle"
-                className="h-10 w-auto"
+                className="w-auto h-10"
               />
             </div>
-            <div className="hidden md:flex items-center gap-14">
+            <div className="items-center hidden md:flex gap-14">
               <a
                 href="#"
                 className="text-white font-grotesk font-normal text-[18px] leading-[23px]"
@@ -59,7 +60,7 @@ function App() {
 
       {/* Events Section */}
       <div className="max-w-[1440px] mx-auto px-[60px] py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {events.map((event, index) => (
             <EventCard
               key={index}
